@@ -1,1 +1,30 @@
-{\n  "name": "ai-desktop-assistant",\n  "version": "1.0.0",\n  "description": "An AI-powered desktop assistant for daily tasks and work",\n  "main": "src/main.js",\n  "scripts": {\n    "start": "electron .",\n    "dev": "electron . --enable-logging",\n    "build": "electron-builder",\n    "test": "jest"\n  },\n  "keywords": ["ai", "assistant", "desktop", "automation"],\n  "author": "Hackuf123",\n  "license": "MIT",\n  "devDependencies": {\n    "electron": "^latest",\n    "electron-builder": "^latest",\n    "jest": "^latest"\n  },\n  "dependencies": {\n    "axios": "^latest",\n    "dotenv": "^latest",\n    "openai": "^latest"\n  }\n}
+{
+  "name": "ai-desktop-assistant",
+  "version": "1.0.0",
+  "description": "An AI-powered desktop assistant for daily tasks and work",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --enable-logging",
+    "build": "electron-builder",
+    "test": "jest"
+  },
+  "keywords": ["ai", "assistant", "desktop", "automation"],
+  "author": "Hackuf123",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "latest",
+    "electron-builder": "latest",
+    "jest": "latest"
+  },
+  "dependencies": {
+    "axios": "latest",
+    "cheerio": "latest",
+    "dotenv": "latest",
+    "openai": "latest",
+    "d3": "latest",
+    "plotly.js": "latest",
+    "nodemailer": "latest",
+    "node-cron": "latest"
+  }
+}

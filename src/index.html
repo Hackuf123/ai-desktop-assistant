@@ -12,7 +12,91 @@
 </head>
 <body>
     <h1>Desktop Assistant</h1>
-    <input type="text" id="task-input" placeholder="Enter your task here..." />
+    <div style="display:flex; gap:10px; align-items:center; margin-bottom:10px;">
+        <input type="text" id="task-input" placeholder="Enter your task here..." style="flex:1; padding:10px;" />
+        <button id="send-task">Run</button>
+        <button id="start-voice">Start Voice</button>
+        <button id="stop-voice" disabled>Stop Voice</button>
+    </div>
+    <div id="voice-state" style="margin-bottom:10px;color:green;">Voice idle</div>
     <div id="result-display"></div>
+
+    <script>
+        const { shell } = require('electron');
+        const { AppAutomator, WebAutomator, TextProcessor, FileOrganizer, PackageManager } = require('./src/modules');
+        const VoiceController = require('./src/modules/voice-controller');
+
+        const taskInput = document.getElementById('task-input');
+        const sendTaskButton = document.getElementById('send-task');
+        const startVoiceButton = document.getElementById('start-voice');
+        const stopVoiceButton = document.getElementById('stop-voice');
+        const resultDisplay = document.getElementById('result-display');
+        const voiceState = document.getElementById('voice-state');
+
+        const voiceController = new VoiceController({ AppAutomator, WebAutomator, TextProcessor, shell });
+
+        function log(...args) {
+            const line = document.createElement('div');
+            line.textContent = args.join(' ');
+            resultDisplay.appendChild(line);
+            resultDisplay.scrollTop = resultDisplay.scrollHeight;
+        }
+
+        sendTaskButton.onclick = async () => {
+            const task = taskInput.value.trim();
+            if (!task) return;
+            const result = await voiceController.processTextCommand(task);
+            log('> ' + task);
+            log('=> ' + (result.message || JSON.stringify(result)));
+        };
+
+        let recognition;
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.lang = 'en-US';
+            recognition.continuous = true;
+            recognition.interimResults = false;
+
+            recognition.onstart = () => {
+                voiceState.textContent = 'Voice listening...';
+                voiceState.style.color = 'blue';
+                startVoiceButton.disabled = true;
+                stopVoiceButton.disabled = false;
+            };
+
+            recognition.onend = () => {
+                voiceState.textContent = 'Voice idle';
+                voiceState.style.color = 'green';
+                startVoiceButton.disabled = false;
+                stopVoiceButton.disabled = true;
+            };
+
+            recognition.onresult = async (event) => {
+                const transcript = event.results[event.results.length - 1][0].transcript.trim();
+                log('🎤 Heard: ' + transcript);
+
+                const result = await voiceController.processTextCommand(transcript);
+                log('=> ' + (result.message || JSON.stringify(result)));
+            };
+
+            recognition.onerror = (event) => {
+                log('Voice error:', event.error);
+            };
+        } else {
+            startVoiceButton.disabled = true;
+            stopVoiceButton.disabled = true;
+            voiceState.textContent = 'Voice recognition not supported in this environment';
+            voiceState.style.color = 'red';
+        }
+
+        startVoiceButton.onclick = () => {
+            if (recognition) recognition.start();
+        };
+
+        stopVoiceButton.onclick = () => {
+            if (recognition) recognition.stop();
+        };
+    </script>
 </body>
 </html>
