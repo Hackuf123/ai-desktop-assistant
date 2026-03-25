@@ -1,7 +1,7 @@
 {
   "name": "ai-desktop-assistant",
   "version": "1.0.0",
-  "description": "An AI-powered desktop assistant for daily tasks and work",
+  "description": "OLIMIA - The Ultimate AI Desktop Assistant with SSH, Web Browsing, File Management, Shell Commands, and Python Script execution",
   "main": "src/main.js",
   "scripts": {
     "start": "electron .",
@@ -9,7 +9,7 @@
     "build": "electron-builder",
     "test": "jest"
   },
-  "keywords": ["ai", "assistant", "desktop", "automation"],
+  "keywords": ["ai", "assistant", "desktop", "automation", "ollama", "ssh", "voice"],
   "author": "Hackuf123",
   "license": "MIT",
   "devDependencies": {
@@ -25,6 +25,13 @@
     "d3": "latest",
     "plotly.js": "latest",
     "nodemailer": "latest",
-    "node-cron": "latest"
+    "node-cron": "latest",
+    "ssh2": "latest",
+    "puppeteer": "latest",
+    "playwright": "latest",
+    "shelljs": "latest",
+    "fluent-ffmpeg": "latest",
+    "@ffmpeg-installer/ffmpeg": "latest",
+    "node-fetch": "latest"
   }
 }

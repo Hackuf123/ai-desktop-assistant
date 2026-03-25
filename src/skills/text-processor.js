@@ -2,7 +2,8 @@ const OpenAI = require('openai');
 
 class TextProcessor {
     constructor(openaiApiKey = null) {
-        this.openai = openaiApiKey ? new OpenAI({ apiKey: openaiApiKey }) : null;
+        const apiKey = openaiApiKey || process.env.OPENAI_API_KEY;
+        this.openai = apiKey ? new OpenAI({ apiKey }) : null;
     }
 
     async processText(text, action, options = {}) {
